@@ -1,0 +1,143 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+generator nestjsDto {
+  provider                        = "prisma-generator-nestjs-dto"
+  output                          = "../src/generated"
+  outputToNestJsResourceStructure = "false"
+  flatResourceStructure           = "false"
+  exportRelationModifierClasses   = "true"
+  reExport                        = "true"
+  createDtoPrefix                 = "Create"
+  updateDtoPrefix                 = "Update"
+  dtoSuffix                       = "Dto"
+  entityPrefix                    = ""
+  entitySuffix                    = "Entity"
+  classValidation                 = "true"
+  fileNamingStyle                 = "kebab"
+  noDependencies                  = "false"
+  outputType                      = "class"
+  prettier                        = "true"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum RoleType {
+  USER
+  ADMIN
+}
+
+enum MessageSender {
+  USER
+  BOT
+}
+
+enum SkinConcern {
+  DARK_CIRCLES
+  DRY_SKIN
+  FRECKLES
+  OILY_SKIN
+  REDNESS_ROSACEA
+  SCARS
+  WRINKLES
+}
+
+model Token {
+  id           String @id(map: "pk_token") @default(dbgenerated("uuid_generate_v4()")) @map("id") @db.Uuid
+  deviceId     String @map("device_id")
+  userId       String @map("user_id") @db.Uuid
+  refreshToken String @map("refresh_token") @db.VarChar(255)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade, map: "fk_token_user")
+
+  @@unique([deviceId, userId], map: "ixuq_token_user_device")
+  @@map("token")
+}
+
+model User {
+  id        String    @id(map: "pk_user") @default(dbgenerated("uuid_generate_v4()")) @map("id") @db.Uuid
+  name      String    @map("name") @db.VarChar(255)
+  avatar    String?   @map("avatar") @db.VarChar(255)
+  phone     String?   @map("phone") @db.VarChar(15)
+  email     String    @unique @map("email") @db.VarChar(255)
+  location  String?   @map("location") @db.VarChar(255)
+  dob       DateTime? @map("date_of_birth") @db.Timestamptz(6)
+  gender    Gender    @default(FEMALE) @map("gender")
+  password  String    @map("password") @db.VarChar(255)
+  role      RoleType  @default(USER) @map("role")
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  tokens         Token[]
+  skinAnalyses   SkinAnalysis[]
+  // chatbotQueries ChatSession[]
+
+  @@map("user")
+}
+
+model SkinAnalysis {
+  id           String   @id(map: "pk_skin_analysis") @default(dbgenerated("uuid_generate_v4()")) @map("id") @db.Uuid
+  userId       String   @map("user_id") @db.Uuid
+  analysisDate DateTime @default(now()) @map("analysis_date") @db.Timestamptz(6)
+  acneLevel    Int      @default(0) @map("acne_level")
+  darkSpots    Int      @default(0) @map("dark_spots")
+  wrinkles     Int      @default(0) @map("wrinkles")
+  rednessLevel Int      @default(0) @map("redness_level")
+  hydration    Int      @default(0) @map("hydration_level")
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  user         User                      @relation(fields: [userId], references: [id], onDelete: Cascade, map: "fk_skin_analysis_user")
+  skinConcerns SkinAnalysisSkinConcern[]
+
+  @@map("skin_analysis")
+}
+
+model SkinAnalysisSkinConcern {
+  skinAnalysisId String      @map("skin_analysis_id") @db.Uuid
+  skinConcern    SkinConcern @map("skin_concern")
+
+  skinAnalysis SkinAnalysis @relation(fields: [skinAnalysisId], references: [id], onDelete: Cascade)
+
+  @@id([skinAnalysisId, skinConcern])
+  @@map("skin_analysis_skin_concern")
+}
+
+// model FAQ {
+//   id       String @id(map: "pk_faq") @default(dbgenerated("uuid_generate_v4()")) @map("id") @db.Uuid
+//   question String @unique @map("question") @db.Text
+//   answer   String @map("answer") @db.Text
+
+//   @@map("faq")
+// }
+
+// model ChatSession {
+//   id        String   @id(map: "pk_chat_session") @default(dbgenerated("uuid_generate_v4()")) @map("id") @db.Uuid
+//   userId    String?  @map("user_id") @db.Uuid
+//   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+//   user     User?         @relation(fields: [userId], references: [id], onDelete: SetNull, map: "fk_chat_session_user")
+//   messages ChatMessage[]
+
+//   @@map("chat_session")
+// }
+
+// model ChatMessage {
+//   id        String        @id(map: "pk_chat_message") @default(dbgenerated("uuid_generate_v4()")) @map("id") @db.Uuid
+//   sessionId String        @map("session_id") @db.Uuid
+//   sender    MessageSender @map("sender")
+//   message   String        @map("message") @db.Text
+//   createdAt DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+
+//   session ChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade, map: "fk_chat_message_session")
+
+//   @@map("chat_message")
+// }
