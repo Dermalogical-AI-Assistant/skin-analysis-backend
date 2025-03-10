@@ -16,4 +16,16 @@ export class ValidationService {
     }
     return user;
   }
+
+  public async validateAnalysisExistsById(analysisId: string) {
+    const user = await this.dbContext.skinAnalysis.findUnique({
+      where: { id: analysisId },
+      select: { id: true },
+    });
+
+    if (!user) {
+      throw new NotFoundException("Skin analysis not found!");
+    }
+    return user;
+  }
 }
