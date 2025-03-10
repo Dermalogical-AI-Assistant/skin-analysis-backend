@@ -14,8 +14,6 @@ import {
   MaxLength,
 } from "class-validator";
 
-
-
 /**
  * 
   acneLevel    Int      @default(0) @map("acne_level")
@@ -64,8 +62,9 @@ export class CreateAnalysisRequestBody {
   @ApiPropertyOptional({
     description: "List of skin concerns",
     example: [SkinConcern.DARK_CIRCLES],
-    type: [SkinConcern]
+    enum: SkinConcern,
+    isArray: true,
   })
-  @IsEnum(SkinConcern, {each: true})
+  @IsEnum(SkinConcern, { each: true })
   listSkinConcerns: SkinConcern[];
 }

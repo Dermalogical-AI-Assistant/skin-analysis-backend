@@ -91,7 +91,7 @@ export class UpdateUserByIdRequestBody {
   @IsEnum(Gender)
   gender?: Gender;
 
-  @ApiPropertyOptional({ description: "Role of user", example: RoleType.PATIENT })
+  @ApiPropertyOptional({ description: "Role of user", example: RoleType.USER })
   @IsOptional()
   @IsEnum(RoleType)
   role?: RoleType;

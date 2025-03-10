@@ -15,10 +15,12 @@ import { IsOrderQueryParam } from "src/common/decorator/order.decorator";
 export class GetMyAnalysesRequestQuery {
   @ApiPropertyOptional({
       description: "List of skin concerns",
-      example: [SkinConcern.DARK_CIRCLES],
+      example: [SkinConcern.FRECKLES],
       type: [SkinConcern]
     })
+    @IsOptional()
     @IsEnum(SkinConcern, {each: true})
+    @Transform(({ value }) => Array.isArray(value) ? value : [value])
     listSkinConcerns: SkinConcern[];
 
   @ApiPropertyOptional({

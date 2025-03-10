@@ -25,36 +25,6 @@ export class GetMyProfileHandler implements IQueryHandler<GetMyProfileQuery> {
         gender: true,
         role: true,
         phone: true,
-        doctor: {
-          select: {
-            shifts: {
-              select: {
-                shift: true,
-                appointments: true,
-                startTime: true,
-                endTime: true,
-              },
-            },
-          },
-        },
-        patient: {
-          select: {
-            scans: true,
-            appointments: {
-              include: {
-                shiftToDoctor: {
-                  select: {
-                    doctor: {
-                      select: {
-                        user: true,
-                      },
-                    },
-                  },
-                },
-              },
-            },
-          },
-        },
       },
     });
 

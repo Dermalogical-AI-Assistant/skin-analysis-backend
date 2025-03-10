@@ -89,7 +89,7 @@ export class CreateUserRequestBody {
   @IsEnum(Gender)
   gender: Gender;
 
-  @ApiProperty({ description: "Role of user", example: RoleType.PATIENT })
+  @ApiProperty({ description: "Role of user", example: RoleType.USER })
   @IsEnum(RoleType)
   role: RoleType;
 

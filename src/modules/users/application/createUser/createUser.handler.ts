@@ -44,8 +44,6 @@ export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
         role,
         dob: dayjs(dob, { utc: true }).toDate(),
         password: hashedPassword,
-        doctor: role == RoleType.DOCTOR ? { create: {} } : undefined,
-        patient: role == RoleType.PATIENT ? { create: {} } : undefined,
       },
       select: {
         id: true,

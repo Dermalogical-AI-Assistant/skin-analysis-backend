@@ -43,7 +43,7 @@ export class GetMyAnalysesHandler implements IQueryHandler<GetMyAnalysesQuery> {
 
     const andWhereConditions: Prisma.Enumerable<Prisma.SkinAnalysisWhereInput> = [{ userId }];
 
-    if (listSkinConcerns.length > 0) {
+    if (listSkinConcerns?.length > 0) {
       andWhereConditions.push({
         skinConcerns: {
           some: {
