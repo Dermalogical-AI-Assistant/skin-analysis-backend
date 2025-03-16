@@ -33,15 +33,14 @@ async function bootstrap() {
       transform: true,
     })
   );
-
-  const config = new DocumentBuilder()
-    .setTitle("Book Recommendation System")
-    .setDescription("API document")
+  const swaggerConfig = new DocumentBuilder()
+    .setTitle("User Analysis Service")
+    .setDescription("API documentation for User Analysis Service")
     .setVersion("1.0")
-    .addBearerAuth()
+    // .addBearerAuth()
     .build();
 
-  const document = SwaggerModule.createDocument(app, config);
+  const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup("swagger", app, document);
 
   await app.listen(port);
