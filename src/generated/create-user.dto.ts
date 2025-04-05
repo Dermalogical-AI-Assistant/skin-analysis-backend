@@ -18,13 +18,6 @@ export class CreateUserDto {
   @IsOptional()
   @IsString()
   avatar?: string;
-  @ApiProperty({
-    required: false,
-    nullable: true,
-  })
-  @IsOptional()
-  @IsString()
-  phone?: string;
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
@@ -45,8 +38,4 @@ export class CreateUserDto {
   @IsOptional()
   @IsDateString()
   dob?: Date;
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
-  password: string;
 }

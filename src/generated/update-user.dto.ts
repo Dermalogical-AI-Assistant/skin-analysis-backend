@@ -17,13 +17,6 @@ export class UpdateUserDto {
   avatar?: string | null;
   @ApiProperty({
     required: false,
-    nullable: true,
-  })
-  @IsOptional()
-  @IsString()
-  phone?: string | null;
-  @ApiProperty({
-    required: false,
   })
   @IsOptional()
   @IsString()
@@ -44,10 +37,4 @@ export class UpdateUserDto {
   @IsOptional()
   @IsDateString()
   dob?: Date | null;
-  @ApiProperty({
-    required: false,
-  })
-  @IsOptional()
-  @IsString()
-  password?: string;
 }

@@ -1,54 +1,32 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import _ from "lodash";
 import { PrismaService } from "src/database";
-import * as bcrypt from "bcrypt";
+import { UserDto } from "../user.dto";
 
 @Injectable()
 export class UserService {
   constructor(private readonly dbContext: PrismaService) {}
 
-  public async comparePassword(option: {
-    inputPassword: string;
-    existedPassword: string;
-  }): Promise<boolean> {
-    const { inputPassword, existedPassword } = option;
-
-    const isEqual = await bcrypt.compare(inputPassword, existedPassword);
-
-    return isEqual;
+  public async createUser(user: UserDto) {
+    await this.dbContext.user.create({
+      data: user,
+    });
   }
 
-  public async verifyUser(option: { email: string; password: string }) {
-    const { email, password } = option;
-
-    const user = await this.dbContext.user.findUnique({
+  public async updateUser(user: UserDto) {
+    await this.dbContext.user.update({
       where: {
-        email,
+        id: user.id
       },
-      select: {
-        id: true,
-        password: true,
-        email: true,
-        name: true,
-        dob: true,
-        role: true,
-        location: true,
-        gender: true,
-        avatar: true,
+      data: user,
+    });
+  }
+
+  public async deleteUserById(id: string) {
+    await this.dbContext.user.delete({
+      where: {
+        id,
       },
     });
-
-    if (!user?.id) {
-      throw new NotFoundException(
-        "There is no user with that email in the system"
-      );
-    }
-
-    const isRightPassword = await this.comparePassword({
-      existedPassword: user.password,
-      inputPassword: password,
-    });
-
-    return isRightPassword ? user : false;
   }
 }
