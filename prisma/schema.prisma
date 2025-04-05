@@ -37,11 +37,6 @@ enum RoleType {
   ADMIN
 }
 
-enum MessageSender {
-  USER
-  BOT
-}
-
 enum SkinConcern {
   DARK_CIRCLES
   DRY_SKIN
@@ -52,34 +47,17 @@ enum SkinConcern {
   WRINKLES
 }
 
-model Token {
-  id           String @id(map: "pk_token") @default(dbgenerated("uuid_generate_v4()")) @map("id") @db.Uuid
-  deviceId     String @map("device_id")
-  userId       String @map("user_id") @db.Uuid
-  refreshToken String @map("refresh_token") @db.VarChar(255)
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade, map: "fk_token_user")
-
-  @@unique([deviceId, userId], map: "ixuq_token_user_device")
-  @@map("token")
-}
-
 model User {
   id        String    @id(map: "pk_user") @default(dbgenerated("uuid_generate_v4()")) @map("id") @db.Uuid
   name      String    @map("name") @db.VarChar(255)
   avatar    String?   @map("avatar") @db.VarChar(255)
-  phone     String?   @map("phone") @db.VarChar(15)
   email     String    @unique @map("email") @db.VarChar(255)
   location  String?   @map("location") @db.VarChar(255)
   dob       DateTime? @map("date_of_birth") @db.Timestamptz(6)
   gender    Gender    @default(FEMALE) @map("gender")
-  password  String    @map("password") @db.VarChar(255)
   role      RoleType  @default(USER) @map("role")
-  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
 
-  tokens         Token[]
   skinAnalyses   SkinAnalysis[]
-  // chatbotQueries ChatSession[]
 
   @@map("user")
 }
@@ -110,34 +88,3 @@ model SkinAnalysisSkinConcern {
   @@id([skinAnalysisId, skinConcern])
   @@map("skin_analysis_skin_concern")
 }
-
-// model FAQ {
-//   id       String @id(map: "pk_faq") @default(dbgenerated("uuid_generate_v4()")) @map("id") @db.Uuid
-//   question String @unique @map("question") @db.Text
-//   answer   String @map("answer") @db.Text
-
-//   @@map("faq")
-// }
-
-// model ChatSession {
-//   id        String   @id(map: "pk_chat_session") @default(dbgenerated("uuid_generate_v4()")) @map("id") @db.Uuid
-//   userId    String?  @map("user_id") @db.Uuid
-//   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-
-//   user     User?         @relation(fields: [userId], references: [id], onDelete: SetNull, map: "fk_chat_session_user")
-//   messages ChatMessage[]
-
-//   @@map("chat_session")
-// }
-
-// model ChatMessage {
-//   id        String        @id(map: "pk_chat_message") @default(dbgenerated("uuid_generate_v4()")) @map("id") @db.Uuid
-//   sessionId String        @map("session_id") @db.Uuid
-//   sender    MessageSender @map("sender")
-//   message   String        @map("message") @db.Text
-//   createdAt DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
-
-//   session ChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade, map: "fk_chat_message_session")
-
-//   @@map("chat_message")
-// }

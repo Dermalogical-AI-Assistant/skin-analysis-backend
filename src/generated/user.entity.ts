@@ -1,6 +1,5 @@
 import { Gender, RoleType } from "@prisma/client";
 import { ApiProperty } from "@nestjs/swagger";
-import { TokenEntity } from "./token.entity";
 import { SkinAnalysisEntity } from "./skin-analysis.entity";
 
 export class UserEntity {
@@ -17,11 +16,6 @@ export class UserEntity {
     nullable: true,
   })
   avatar: string | null;
-  @ApiProperty({
-    required: false,
-    nullable: true,
-  })
-  phone: string | null;
   @ApiProperty({
     required: false,
   })
@@ -44,25 +38,10 @@ export class UserEntity {
   })
   gender: Gender;
   @ApiProperty({
-    required: false,
-  })
-  password: string;
-  @ApiProperty({
     enum: RoleType,
     required: false,
   })
   role: RoleType;
-  @ApiProperty({
-    type: "string",
-    format: "date-time",
-    required: false,
-  })
-  createdAt: Date;
-  @ApiProperty({
-    isArray: true,
-    required: false,
-  })
-  tokens?: TokenEntity[];
   @ApiProperty({
     isArray: true,
     required: false,

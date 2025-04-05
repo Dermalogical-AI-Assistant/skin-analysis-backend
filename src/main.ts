@@ -34,8 +34,8 @@ async function bootstrap() {
     })
   );
   const swaggerConfig = new DocumentBuilder()
-    .setTitle("User Analysis Service")
-    .setDescription("API documentation for User Analysis Service")
+    .setTitle("Skin Analysis Service")
+    .setDescription("API documentation for Skin Analysis Service")
     .setVersion("1.0")
     // .addBearerAuth()
     .build();
