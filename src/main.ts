@@ -37,7 +37,7 @@ async function bootstrap() {
     .setTitle("Skin Analysis Service")
     .setDescription("API documentation for Skin Analysis Service")
     .setVersion("1.0")
-    // .addBearerAuth()
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, swaggerConfig);
